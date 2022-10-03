@@ -47,7 +47,7 @@ class AddEditNoteViewModel @Inject constructor(
         savedStateHandle.get<Int>("noteId")?.let { noteId ->
             if (noteId != -1) {
                 viewModelScope.launch {
-                    noteUseCases.getNoteUseCase(noteId).also { note ->
+                    noteUseCases.getNote(noteId).also { note ->
                         currentNoteId = note?.id
                         _noteTitle.value = noteTitle.value.copy(
                             text = note?.title ?: "",
@@ -57,11 +57,10 @@ class AddEditNoteViewModel @Inject constructor(
                             text = note?.content ?: "",
                             isHintVisible = false
                         )
-                        _noteColor=noteColor
+                        _noteColor.value = note!!.color
                     }
                 }
             }
-
         }
     }
 
@@ -95,7 +94,7 @@ class AddEditNoteViewModel @Inject constructor(
             is AddEditNoteEvent.SaveNote -> {
                 viewModelScope.launch {
                     try {
-                        noteUseCases.addNoteUseCase(
+                        noteUseCases.addNote(
                             Note(
                                 title = noteTitle.value.text,
                                 content = noteContent.value.text,
@@ -112,7 +111,6 @@ class AddEditNoteViewModel @Inject constructor(
                                 message = e.message ?: "Couldn't save note"
                             )
                         )
-
                     }
                 }
             }
@@ -123,6 +121,5 @@ class AddEditNoteViewModel @Inject constructor(
         data class ShowSnackbar(val message: String) : UiEvent()
         object SaveNote : UiEvent()
     }
-
 
 }

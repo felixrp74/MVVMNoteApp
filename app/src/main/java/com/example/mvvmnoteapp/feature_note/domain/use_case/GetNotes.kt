@@ -7,7 +7,7 @@ import com.example.mvvmnoteapp.feature_note.domain.util.OrderType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetNotesUseCase(
+class GetNotes(
     private val repository: NoteRepository
 ) {
     operator fun invoke(
@@ -17,16 +17,16 @@ class GetNotesUseCase(
             when (noteOrder.orderType){
                 is OrderType.Ascending -> {
                     when (noteOrder){
-                        is NoteOrder.Title -> notes.sortedBy { it.title.lowercase() }
-                        is NoteOrder.Date -> notes.sortedBy{ it.timestamp }
-                        is NoteOrder.Color -> notes.sortedBy { it.color }
+                        is NoteOrder.Title -> notes.sortedBy { note->note.title.lowercase() }
+                        is NoteOrder.Date -> notes.sortedBy{ note->note.timestamp }
+                        is NoteOrder.Color -> notes.sortedBy { note->note.color }
                     }
                 }
                 is OrderType.Descending -> {
                     when (noteOrder){
-                        is NoteOrder.Title -> notes.sortedByDescending { it.title.lowercase() }
-                        is NoteOrder.Date -> notes.sortedByDescending{ it.timestamp }
-                        is NoteOrder.Color -> notes.sortedByDescending { it.color }
+                        is NoteOrder.Title -> notes.sortedByDescending { note->note.title.lowercase() }
+                        is NoteOrder.Date -> notes.sortedByDescending{ note->note.timestamp }
+                        is NoteOrder.Color -> notes.sortedByDescending { note->note.color }
                     }
                 }
             }

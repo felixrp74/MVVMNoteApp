@@ -4,7 +4,7 @@ import com.example.mvvmnoteapp.feature_note.domain.model.InvalidNoteException
 import com.example.mvvmnoteapp.feature_note.domain.model.Note
 import com.example.mvvmnoteapp.feature_note.domain.repository.NoteRepository
 
-class AddNoteUseCase(
+class AddNote(
     private val repository: NoteRepository
 ) {
 
