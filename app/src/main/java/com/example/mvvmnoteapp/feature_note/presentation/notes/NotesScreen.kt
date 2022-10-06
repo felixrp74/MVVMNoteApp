@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import com.example.mvvmnoteapp.feature_note.presentation.notes.components.NoteItem
 import com.example.mvvmnoteapp.feature_note.presentation.notes.components.OrderSection
 import com.example.mvvmnoteapp.feature_note.presentation.util.Screen
+import com.example.mvvmnoteapp.ui.theme.Green
+import com.example.mvvmnoteapp.ui.theme.LightBlue
 import kotlinx.coroutines.launch
 
 @Composable
@@ -41,7 +43,17 @@ fun NotesScreen(
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add note")
             }
         },
-        scaffoldState = scaffoldState
+        scaffoldState = scaffoldState,
+        snackbarHost = {
+            // reuse default SnackbarHost to have default animation and timing handling
+            SnackbarHost(it) { data ->
+                // custom snackbar with the custom colors
+                Snackbar(
+                    actionColor = Green,
+                    snackbarData = data
+                )
+            }
+        },
 
     ) {
         Column(
@@ -56,7 +68,7 @@ fun NotesScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Your note",
+                    text = "Notes",
                     style = MaterialTheme.typography.h4,
                 )
                 IconButton(
@@ -100,12 +112,15 @@ fun NotesScreen(
                             },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
+
                             scope.launch {
+
                                 val result = scaffoldState.snackbarHostState.showSnackbar(
                                     message = "Note deleted",
-                                    actionLabel = "Undo"
+                                    actionLabel = "Undo",
+
                                 )
-                                if (result == SnackbarResult.ActionPerformed) {
+                                if(result == SnackbarResult.ActionPerformed) {
                                     viewModel.onEvent(NotesEvent.RestoreNote)
                                 }
                             }
